@@ -674,6 +674,74 @@ namespace CarStore.API.Controllers
             };
             return Ok(response);
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetMyBoughtCars")]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetMyBoughtCars()
+        {
+            Stopwatch exp = new Stopwatch();
+            exp.Start();
+            long exec_time = 0;
+
+            ResponseModel response;
+
+            Customer customer;
+            List<string> errors = new List<string>();
+
+            var brandList = _uow.Brand.Where(a => a.Deleted == null).ToList();
+
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            var carsForSale = _uow.Car.Where(a => a.Deleted == null && a.BuyerId == user.Id && a.SalesDate != null).Select(a => new CarListResponseModel
+            {
+                CarId = a.Id,
+                CarName = a.CarName,
+                BrandId = a.BrandId,
+                BrandName = brandList.FirstOrDefault(b => b.Id == a.BrandId).Name,
+                Saler = new SalerResponseModel
+                {
+                    SalerId = a.SalerId,
+                    SalerName = _userManager.FindByIdAsync(a.SalerId).GetAwaiter().GetResult().Name,
+                    SalerSurname = _userManager.FindByIdAsync(a.SalerId).GetAwaiter().GetResult().Surname
+
+                },
+                Buyer = new BuyerResponseModel
+                {
+                    BuyerId = a.BuyerId,
+                    BuyerName = _userManager.FindByIdAsync(a.BuyerId).GetAwaiter().GetResult().Name,
+                    BuyerSurname = _userManager.FindByIdAsync(a.BuyerId).GetAwaiter().GetResult().Surname,
+                },
+                BodyType = a.BodyType,
+                Color = a.Color,
+                FuelType = a.FuelType,
+                GearType = a.GearType,
+                PriceWithTax = a.PriceWithTax,
+                Year = a.Year,
+                SalesDate = a.SalesDate,
+
+            }).ToList();
+            exp.Stop();
+
+            exec_time = exp.ElapsedMilliseconds;
+
+            response = new ResponseModel
+            {
+                Code = System.Net.HttpStatusCode.OK,
+                Success = true,
+                Message = "Başarılı!",
+                ExecTime = exec_time,
+                Data = carsForSale
+            };
+            return Ok(response);
+        }
+
         #region Login Check
 
         private async Task<bool> IsUsernameAndPassword(Customer user, string password)

@@ -15,4 +15,13 @@ namespace CarStore.Domain.Dto_s
         public int Installment { get; set; } = 1;
                
     }
+
+
+    public class PaymentViewModel
+    {
+        public int OrderId { get; set; } = 0;
+        public int CarId { get; set; } = 0;
+        public string? CustomerId { get; set; }
+        public string? SalerId { get; set; }
+    }
 }

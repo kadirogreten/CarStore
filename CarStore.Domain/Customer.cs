@@ -18,9 +18,5 @@ namespace CarStore.Domain
         public string? ModifiedBy { get; set; }
         public DateTime? Deleted { get; set; }
         public string? DeletedBy { get; set; }
-
-
-        public virtual ICollection<Car>? Cars { get; set; }
-        public virtual ICollection<Order>? Orders { get; set; }
     }
 }
