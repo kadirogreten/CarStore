@@ -438,7 +438,7 @@ namespace CarStore.API.Controllers
 
 
         /// <summary>
-        /// 
+        /// Aracımı sisteme kaydetme
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>

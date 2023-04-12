@@ -16,6 +16,12 @@ using System.Text;
 
 namespace CarStore.API.Controllers
 {
+
+
+    /// <summary>
+    /// Önce sipariş oluşturup. Daha sonra makepayment ile eğer ki taksit sayısı 1 ise peşin ödeme değilse ve 1 den büyük ise
+    /// her metod tetiklendiğinde 1 taksit ödemesi gerçekleşir.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -38,7 +44,7 @@ namespace CarStore.API.Controllers
 
 
         /// <summary>
-        /// username veya email ile geçerli
+        /// Taksit sayısı minimum 1 girilmelidir.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -222,6 +228,12 @@ namespace CarStore.API.Controllers
             return Ok(response);
         }
 
+
+        /// <summary>
+        /// Taksit ödeme ekranı
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("MakePayment")]
         public async Task<IActionResult> MakePayment([FromBody] PaymentViewModel model)
